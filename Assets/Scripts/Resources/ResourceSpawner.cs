@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class ResourceSpawner : Spawner<Resource>
 {
-    [SerializeField] private float _spawnInterval = 5f;
-    [SerializeField] private float _spawnRadius = 10f;
-    [SerializeField] private float _spawnYOffcet = 7f;
-    [SerializeField] private Vector3 _spawnCenter;
+    [SerializeField] private float _spawnInterval = 1f;
+
+    [SerializeField] private float _innerRadius = 20f;
+    [SerializeField] private float _outerRadius = 100f;
+
+    [SerializeField] private float _spawnYOffcet = 20f;
+
+    [SerializeField] private Transform _spawnCenter;
 
     private float _timer;
 
@@ -38,8 +42,14 @@ public class ResourceSpawner : Spawner<Resource>
 
     private Vector3 GetRandomPosition()
     {
-        _spawnCenter.y = _spawnYOffcet;
-        Vector2 circle = Random.insideUnitCircle * _spawnRadius;
-        return new Vector3 (_spawnCenter.x + circle.x, _spawnCenter.y, _spawnCenter.z + circle.y);
+        const float FullCircleRadians = Mathf.PI * 2f;
+
+        float angle = Random.Range(0f, FullCircleRadians);
+        float radius = Mathf.Sqrt(Random.Range(_innerRadius * _innerRadius, _outerRadius * _outerRadius));
+
+        float x = Mathf.Cos(angle) * radius;
+        float z = Mathf.Sin(angle) * radius;
+
+        return new Vector3(_spawnCenter.position.x + x, _spawnYOffcet, _spawnCenter.position.z + z);
     }
 }

@@ -30,8 +30,8 @@ public class Base : MonoBehaviour
     {
         while (true)
         {
-            PerformScanCycle();
             yield return new WaitForSeconds(_scanInterval);
+            PerformScanCycle();
         }
     }
 

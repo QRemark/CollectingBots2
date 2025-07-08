@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class BaseResourceScanner : MonoBehaviour
 {
-    [SerializeField] private float _scanRadius = 400f;
+    [SerializeField] private float _scanRadius = 110;
+    [SerializeField] private ScanEffect _scanEffect;
 
     public List<Resource> ScanAvailableResources(Dictionary<Resource, Unit> activeTasks)
     {
+        _scanEffect?.Play(_scanRadius);
+
         List<Resource> availableResources = new();
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, _scanRadius);
