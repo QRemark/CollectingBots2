@@ -15,9 +15,9 @@ public class BaseResourceScanner : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, _scanRadius);
 
-        foreach (Collider col in colliders)
+        foreach (Collider collider in colliders)
         {
-            if (col.TryGetComponent(out Resource resource))
+            if (collider.TryGetComponent(out Resource resource))
             {
                 bool notAssigned = activeTasks.ContainsKey(resource) == false;
 

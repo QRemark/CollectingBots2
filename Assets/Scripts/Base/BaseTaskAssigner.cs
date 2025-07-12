@@ -13,7 +13,7 @@ public class BaseTaskAssigner : MonoBehaviour
 
     public void AssignTasks(List<Unit> units, List<Resource> availableResources)
     {
-        foreach (var unit in units)
+        foreach (Unit unit in units)
         {
             if (unit.IsBusy == false && unit.ReadyForNewTask)
             {
@@ -24,7 +24,7 @@ public class BaseTaskAssigner : MonoBehaviour
 
     private void TryAssignTaskToUnit(Unit unit, List<Resource> availableResources)
     {
-        var closest = availableResources
+        Resource closest = availableResources
             .Where(resourse => resourse != null && resourse.IsAvailable && _activeTasks.ContainsKey(resourse) == false)
             .OrderBy(resource => Vector3.Distance(unit.transform.position, resource.transform.position))
             .FirstOrDefault();

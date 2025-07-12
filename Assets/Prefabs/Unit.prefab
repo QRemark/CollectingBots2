@@ -153,13 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d83d56ac904b7245af73a791dafa0e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 75
-  _slopeEffectStrength: 1
-  _slopeCheckDistance: 2
-  _turnSmoothTime: 5
-  _terrainMask:
-    serializedVersion: 2
-    m_Bits: 256
+  _baseSpeed: 25
 --- !u!54 &1972032819687030808
 Rigidbody:
   m_ObjectHideFlags: 0

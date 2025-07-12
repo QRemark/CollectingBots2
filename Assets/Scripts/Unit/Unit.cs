@@ -11,17 +11,15 @@ public class Unit : MonoBehaviour
     private UnitResourceHandler _resourceHandler;
 
     private Vector3 _basePosition;
-
     private Resource _targetResource;
-
     private bool _isBusy;
+
     public bool IsBusy => _isBusy;
     public bool ReadyForNewTask { get; private set; }
+    public UnitMover Mover => _mover;
+    public Vector3 BasePosition => _basePosition;
 
     public event Action<Unit, Resource> ResourceDelivered;
-
-    public Vector3 GetBasePosition() => _basePosition;
-    public UnitMover GetMover() => _mover;
 
     public void Initialize(Vector3 basePos)
     {

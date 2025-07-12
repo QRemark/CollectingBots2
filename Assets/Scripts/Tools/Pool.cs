@@ -1,44 +1,23 @@
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 
-public class Pool<T> where T: MonoBehaviour
+public class Pool<T> where T : MonoBehaviour
 {
-    private Queue<T> _deactiveObjects = new Queue<T>();
-    private List<T> _activeObjects = new List<T>();
-    
-    private T _prefab;
-    
+    private readonly Queue<T> _inactiveObjects = new Queue<T>();
+    private readonly List<T> _activeObjects = new List<T>();
+
     private Transform _parent;
-    
-    private int _maxSize;
-    private int _curreentCount;
 
-    public event Action PoolChanged;
-
-    public int TotalCreated { get; private set; }
-    public int ActiveCount => _activeObjects.Count;
-
-    public void Initialize(T prefab, int initalSize, int maxSize)
+    public void Initialize(T prefab, int initialSize)
     {
-        _prefab = prefab;
-        _maxSize = maxSize;
-        _curreentCount = 0;
-
-        TotalCreated = 0;
-
-        _deactiveObjects.Clear();
+        _inactiveObjects.Clear();
         _activeObjects.Clear();
 
-        for (int i = 0; i < initalSize; i++)
+        for (int i = 0; i < initialSize; i++)
         {
-            T obj = Create();
-            
-            if(obj != null)
-            {
-                obj.gameObject.SetActive(false);
-                _deactiveObjects.Enqueue(obj);
-            }
+            T obj = Object.Instantiate(prefab, _parent);
+            obj.gameObject.SetActive(false);
+            _inactiveObjects.Enqueue(obj);
         }
     }
 
@@ -47,59 +26,25 @@ public class Pool<T> where T: MonoBehaviour
         _parent = parent;
     }
 
-    public T GetObject(bool activate = true)
+    public T GetObject()
     {
-        if (_deactiveObjects.Count > 0)
-        {
-            T obj = _deactiveObjects.Dequeue();
+        if (_inactiveObjects.Count == 0)
+            return null;
 
-            if(activate)
-                obj.gameObject.SetActive(true);
+        T obj = _inactiveObjects.Dequeue();
+        obj.gameObject.SetActive(true);
+        _activeObjects.Add(obj);
 
-            _activeObjects.Add(obj);
-            PoolChanged?.Invoke();
-
-            return obj;
-        }
-
-        T newObj = Create();
-
-        if (newObj != null)
-        {
-            if (activate)
-                newObj.gameObject.SetActive(true);
-
-            _activeObjects.Add(newObj);
-            PoolChanged?.Invoke();
-
-            return newObj;
-        }
-        
-        return null;
+        return obj;
     }
 
     public void ReleaseObject(T obj)
     {
-        if (_deactiveObjects.Contains(obj) == false)
+        if (_inactiveObjects.Contains(obj) == false)
         {
             obj.gameObject.SetActive(false);
-            _deactiveObjects.Enqueue(obj);
+            _inactiveObjects.Enqueue(obj);
             _activeObjects.Remove(obj);
-            PoolChanged?.Invoke();
         }
-    }
-
-    private T Create()
-    {
-        if (_curreentCount >= _maxSize)
-        {
-            return null;
-        }
-
-        T obj = UnityEngine.Object.Instantiate(_prefab, _parent);
-        _curreentCount++;
-        TotalCreated++;
-
-        return obj;
     }
 }

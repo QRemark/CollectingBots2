@@ -4,7 +4,6 @@ using UnityEngine;
 public class UnitMover : MonoBehaviour
 {
     [SerializeField] private float _baseSpeed = 5f;
-    //[SerializeField] private LayerMask _terrainMask;
 
     private Rigidbody _rigidbody;
     private Vector3 _targetPosition;
@@ -17,8 +16,6 @@ public class UnitMover : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
     private void FixedUpdate()

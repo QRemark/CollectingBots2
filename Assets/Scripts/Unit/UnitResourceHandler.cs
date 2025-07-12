@@ -26,17 +26,15 @@ public class UnitResourceHandler : MonoBehaviour
         targetResource.MarkCollected();
         _carriedResource = targetResource;
 
-        Rigidbody rigiedbody = _carriedResource.GetComponent<Rigidbody>();
-
-        if (rigiedbody != null)
+        if (_carriedResource.TryGetComponent(out Rigidbody rigidbody))
         {
-            rigiedbody.isKinematic = true;
+            rigidbody.isKinematic = true;
         }
 
         _carriedResource.transform.SetParent(unit.transform);
         _carriedResource.transform.localPosition = new Vector3(0, _pickupHeightOffset, 0);
 
-        unit.GetMover().SetTarget(unit.GetBasePosition());
+        unit.Mover.SetTarget(unit.BasePosition);
     }
 
     public void TryDeliveryPhase(Vector3 basePosition, UnitMover mover, Unit unit)
@@ -50,10 +48,10 @@ public class UnitResourceHandler : MonoBehaviour
         {
             _carriedResource.transform.SetParent(null);
 
-            Rigidbody rigiedbody = _carriedResource.GetComponent<Rigidbody>();
-
-            if (rigiedbody != null)
-                rigiedbody.isKinematic = false;
+            if (_carriedResource.TryGetComponent(out Rigidbody rigidbody))
+            {
+                rigidbody.isKinematic = false;
+            }
 
             Resource delivered = _carriedResource;
             _carriedResource = null;
@@ -64,5 +62,4 @@ public class UnitResourceHandler : MonoBehaviour
         mover.ClearTarget();
         unit.BecomeIdle();
     }
-
 }

@@ -3,36 +3,36 @@ using UnityEngine;
 public class ResourceSpawner : Spawner<Resource>
 {
     [SerializeField] private float _spawnInterval = 1f;
-
     [SerializeField] private float _innerRadius = 20f;
     [SerializeField] private float _outerRadius = 100f;
-
     [SerializeField] private float _spawnYOffcet = 20f;
 
     [SerializeField] private Transform _spawnCenter;
 
+    private float _fullCircleRadians = Mathf.PI * 2f;
     private float _timer;
+    private Quaternion _defaultRotation = Quaternion.identity;
 
     private void Update()
     {
-        GenerateResource();
+        GenerateResourceOnInterval();
     }
 
-    private void GenerateResource()
+    private void GenerateResourceOnInterval()
     {
         _timer += Time.deltaTime;
 
         if (_timer >= _spawnInterval)
         {
             _timer = 0f;
-            SpawnResource();
+            CreateResource();
         }
     }
 
-    private void SpawnResource()
+    private void CreateResource()
     {
         Vector3 position = GetRandomPosition();
-        Resource resource = SpawnObject(position, Quaternion.identity);
+        Resource resource = SpawnObject(position, _defaultRotation);
 
         if (resource != null)
         {
@@ -42,14 +42,12 @@ public class ResourceSpawner : Spawner<Resource>
 
     private Vector3 GetRandomPosition()
     {
-        const float FullCircleRadians = Mathf.PI * 2f;
-
-        float angle = Random.Range(0f, FullCircleRadians);
+        float angle = Random.Range(0f, _fullCircleRadians);
         float radius = Mathf.Sqrt(Random.Range(_innerRadius * _innerRadius, _outerRadius * _outerRadius));
 
-        float x = Mathf.Cos(angle) * radius;
-        float z = Mathf.Sin(angle) * radius;
+        float xOffcet = Mathf.Cos(angle) * radius;
+        float zOffcet = Mathf.Sin(angle) * radius;
 
-        return new Vector3(_spawnCenter.position.x + x, _spawnYOffcet, _spawnCenter.position.z + z);
+        return new Vector3(_spawnCenter.position.x + xOffcet, _spawnYOffcet, _spawnCenter.position.z + zOffcet);
     }
 }

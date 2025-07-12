@@ -9,42 +9,41 @@ public class UnitSpawner : Spawner<Unit>
     [SerializeField] private float _angleStepDegrees = 30f;
 
     private float _yOffset = 0f; 
-
+    private Quaternion _defaultRotation = Quaternion.identity;
+    private Vector3 _defaultVelocity = Vector3.zero;
     private List<Unit> _units = new List<Unit>();
-    public IReadOnlyList<Unit> Units => _units;
 
+    public IReadOnlyList<Unit> Units => _units;
 
     protected override void Start()
     {
-        if (_spawnPoint == Vector3.zero)
+        if (_spawnPoint == _defaultVelocity)
             _spawnPoint = transform.position;
 
         base.Start();
-        SpawnInitialUnits();
+        CreateInitialUnits();
     }
 
-    private void SpawnInitialUnits()
+    private void CreateInitialUnits()
     {
         for (int i = 0; i < _initialUnitCount; i++)
         {
             float angle = i * _angleStepDegrees * Mathf.Deg2Rad;
-            float x = Mathf.Cos(angle) * _spawnRadius;
-            float z = Mathf.Sin(angle) * _spawnRadius;
+            float offsetX = Mathf.Cos(angle) * _spawnRadius;
+            float offsetZ = Mathf.Sin(angle) * _spawnRadius;
 
-            Vector3 offset = new Vector3(x, _yOffset, z);
+            Vector3 offset = new Vector3(offsetX, _yOffset, offsetZ);
             Vector3 spawnPosition = _spawnPoint + offset;
 
-            Unit unit = SpawnObject(spawnPosition, Quaternion.identity);
+            Unit unit = SpawnObject(spawnPosition, _defaultRotation);
 
             if (unit != null)
             {
-                var rb = unit.GetComponent<Rigidbody>();
-
-                if (rb != null)
+                if (unit.TryGetComponent(out Rigidbody unitRigidbody))
                 {
-                    rb.position = spawnPosition;
-                    rb.linearVelocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
+                    unitRigidbody.position = spawnPosition;
+                    unitRigidbody.linearVelocity = _defaultVelocity;
+                    unitRigidbody.angularVelocity = _defaultVelocity;
                 }
                 else
                 {
