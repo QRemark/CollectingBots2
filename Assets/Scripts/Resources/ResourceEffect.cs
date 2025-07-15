@@ -2,22 +2,16 @@ using UnityEngine;
 
 public class ResourceEffect : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _smokeEffect;
+    [SerializeField] private ParticleSystem _fire;
 
     public void Play()
     {
-        if (_smokeEffect == null)
-            return;
-
-        _smokeEffect.Clear();
-        _smokeEffect.Play();
+        _fire.Clear();
+        _fire.Play();
     }
 
     public void Stop()
     {
-        if (_smokeEffect == null)
-            return;
-
-        _smokeEffect.Stop();
+        _fire.Stop();
     }
 }

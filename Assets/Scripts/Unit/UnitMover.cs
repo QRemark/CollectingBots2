@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class UnitMover : MonoBehaviour
 {
-    [SerializeField] private float _baseSpeed = 5f;
+    [SerializeField] private float _baseSpeed = 25f;
 
     private Rigidbody _rigidbody;
     private Vector3 _targetPosition;

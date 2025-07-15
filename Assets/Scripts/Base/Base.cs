@@ -11,7 +11,7 @@ public class Base : MonoBehaviour
     [SerializeField] private ResourceSpawner _resourceSpawner;
 
     [SerializeField] private BaseResourceScanner _scanner;
-    [SerializeField] private BaseTaskAssigner _assigner;
+    [SerializeField] private TaskAssigner _assigner;
 
     [SerializeField] private ResourceCounter _resourceCounter;
     [SerializeField] private BaseResourceUI _resourceUI;
@@ -50,8 +50,7 @@ public class Base : MonoBehaviour
         SubscribeAllUnits();
         RefreshAvailableResources();
 
-        List<Unit> idleUnits = new List<Unit>(_unitSpawner.Units.ToList());
-        _assigner.AssignTasks(idleUnits, _availableResources);
+        _assigner.AssignTasks(_unitSpawner.Units, _availableResources);
     }
 
     private void SubscribeAllUnits()
@@ -82,7 +81,5 @@ public class Base : MonoBehaviour
 
         resource.ResetState();
         _resourceSpawner.ReturnToPool(resource);
-
-        _assigner.AssignTasks(new List<Unit> { unit }, _availableResources);
     }
 }

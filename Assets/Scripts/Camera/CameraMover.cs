@@ -21,7 +21,6 @@ public class CameraMover : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-
         Vector3 moveDir = (right * input.x + forward * input.y).normalized;
 
         Vector3 move = moveDir * _moveSpeed * Time.deltaTime;

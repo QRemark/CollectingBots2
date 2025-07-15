@@ -37,7 +37,7 @@ public class UnitResourceHandler : MonoBehaviour
         unit.Mover.SetTarget(unit.BasePosition);
     }
 
-    public void TryDeliveryPhase(Vector3 basePosition, UnitMover mover, Unit unit)
+    public void TryDeliveryPhase(Vector3 basePosition, Unit unit)
     {
         float distance = Vector3.Distance(unit.transform.position, basePosition);
 
@@ -59,7 +59,6 @@ public class UnitResourceHandler : MonoBehaviour
             unit.NotifyDelivery(delivered);
         }
 
-        mover.ClearTarget();
         unit.BecomeIdle();
     }
 }

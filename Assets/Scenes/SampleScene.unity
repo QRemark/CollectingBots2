@@ -327,7 +327,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -5526,8 +5526,8 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 739530254}
   - {fileID: 1148322576}
+  - {fileID: 739530254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1512214202
@@ -5711,10 +5711,9 @@ MonoBehaviour:
   _prefab: {fileID: 5537163490449121910, guid: a8fd705d8f30773498acbeabc0229060, type: 3}
   _parentPosition: {fileID: 1604258032}
   _initialSize: 3
-  _spawnPoint: {x: 0, y: 0, z: 0}
   _initialUnitCount: 3
   _spawnRadius: 20
-  _angleStepDegrees: 30
+  _angleStepDegrees: 90
 --- !u!4 &1604258032
 Transform:
   m_ObjectHideFlags: 0

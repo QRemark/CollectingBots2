@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseTaskAssigner : MonoBehaviour
+public class TaskAssigner : MonoBehaviour
 {
     private Dictionary<Resource, Unit> _activeTasks;
 
@@ -11,7 +11,7 @@ public class BaseTaskAssigner : MonoBehaviour
         _activeTasks = activeTasks;
     }
 
-    public void AssignTasks(List<Unit> units, List<Resource> availableResources)
+    public void AssignTasks(IEnumerable<Unit> units, List<Resource> availableResources)
     {
         foreach (Unit unit in units)
         {

@@ -7,9 +7,6 @@ public class ScanEffect : MonoBehaviour
 
     public void Play(float radius)
     {
-        if (_scanEffect == null) 
-            return;
-
         ParticleSystem.ShapeModule shape = _scanEffect.shape;
         shape.radius = radius;
 

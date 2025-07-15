@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class UnitSpawner : Spawner<Unit>
 {
-    [SerializeField] private Vector3 _spawnPoint;
     [SerializeField] private int _initialUnitCount = 3;
     [SerializeField] private float _spawnRadius = 5f;
     [SerializeField] private float _angleStepDegrees = 30f;
@@ -12,13 +11,13 @@ public class UnitSpawner : Spawner<Unit>
     private Quaternion _defaultRotation = Quaternion.identity;
     private Vector3 _defaultVelocity = Vector3.zero;
     private List<Unit> _units = new List<Unit>();
+    private Vector3 _spawnPoint;
 
-    public IReadOnlyList<Unit> Units => _units;
+    public IEnumerable<Unit> Units => _units;
 
     protected override void Start()
     {
-        if (_spawnPoint == _defaultVelocity)
-            _spawnPoint = transform.position;
+        _spawnPoint = transform.position;
 
         base.Start();
         CreateInitialUnits();
