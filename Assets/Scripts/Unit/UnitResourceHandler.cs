@@ -6,7 +6,6 @@ public class UnitResourceHandler : MonoBehaviour
     [SerializeField] private float _deliveryRadius = 2f;
 
     private Resource _carriedResource;
-    public bool IsCarrying => _carriedResource != null;
 
     public void SetCarriedResource(Resource resource)
     {
@@ -18,47 +17,47 @@ public class UnitResourceHandler : MonoBehaviour
         _carriedResource = null;
     }
 
-    public void TryPickupPhase(Resource targetResource, float pickupRadius, Unit unit)
+    public bool IsTryPickup(Resource target, float pickupRadius)
     {
-        if (Vector3.Distance(unit.transform.position, targetResource.transform.position) > pickupRadius)
-            return;
+        if (Vector3.Distance(transform.position, target.transform.position) > pickupRadius)
+            return false;
 
-        targetResource.MarkCollected();
-        _carriedResource = targetResource;
+        target.MarkCollected();
+        _carriedResource = target;
 
         if (_carriedResource.TryGetComponent(out Rigidbody rigidbody))
         {
             rigidbody.isKinematic = true;
         }
 
-        _carriedResource.transform.SetParent(unit.transform);
+        _carriedResource.transform.SetParent(transform);
         _carriedResource.transform.localPosition = new Vector3(0, _pickupHeightOffset, 0);
 
-        unit.Mover.SetTarget(unit.BasePosition);
+        return true;
     }
 
-    public void TryDeliveryPhase(Vector3 basePosition, Unit unit)
+    public bool IsTryDelivery(Vector3 deliveryPoint, out Resource delivered)
     {
-        float distance = Vector3.Distance(unit.transform.position, basePosition);
+        delivered = null;
+
+        if (_carriedResource == null)
+            return false;
+
+        float distance = Vector3.Distance(transform.position, deliveryPoint);
 
         if (distance > _deliveryRadius)
-            return;
+            return false;
 
-        if (_carriedResource != null)
+        _carriedResource.transform.SetParent(null);
+
+        if (_carriedResource.TryGetComponent(out Rigidbody rigidbody))
         {
-            _carriedResource.transform.SetParent(null);
-
-            if (_carriedResource.TryGetComponent(out Rigidbody rigidbody))
-            {
-                rigidbody.isKinematic = false;
-            }
-
-            Resource delivered = _carriedResource;
-            _carriedResource = null;
-
-            unit.NotifyDelivery(delivered);
+            rigidbody.isKinematic = false;
         }
 
-        unit.BecomeIdle();
+        delivered = _carriedResource;
+        _carriedResource = null;
+
+        return true;
     }
 }

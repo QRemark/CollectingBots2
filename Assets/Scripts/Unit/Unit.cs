@@ -16,14 +16,12 @@ public class Unit : MonoBehaviour
 
     public bool ReadyForNewTask { get; private set; }
     public bool IsBusy => _isBusy;
-    public UnitMover Mover => _mover;
-    public Vector3 BasePosition => _basePosition;
 
     public event Action<Unit, Resource> ResourceDelivered;
 
-    public void Initialize(Vector3 basePos)
+    public void Initialize(Vector3 position)
     {
-        _basePosition = basePos;
+        _basePosition = position;
         _isBusy = false;
         ReadyForNewTask = true;
     }
@@ -39,13 +37,14 @@ public class Unit : MonoBehaviour
         if (_isBusy == false)
             return;
 
-        if (_resourceHandler.IsCarrying == false)
+        if (_resourceHandler.IsTryPickup(_targetResource, _pickupRadius))
         {
-            _resourceHandler.TryPickupPhase(_targetResource, _pickupRadius, this);
+            _mover.SetTarget(_basePosition);
         }
-        else
+        if (_resourceHandler.IsTryDelivery(_basePosition, out Resource delivered))
         {
-            _resourceHandler.TryDeliveryPhase(_basePosition, this);
+            NotifyDelivery(delivered);
+            BecomeIdle();
         }
     }
 

@@ -23,6 +23,7 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
             return null;
 
         obj.transform.SetPositionAndRotation(position, rotation);
+
         return obj;
     }
 

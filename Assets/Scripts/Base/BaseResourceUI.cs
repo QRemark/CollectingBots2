@@ -9,7 +9,6 @@ public class BaseResourceUI : MonoBehaviour
     public void Initialize(ResourceCounter counter)
     {
         counter.CountChanged += UpdateText;
-        UpdateText(counter.Count);
     }
 
     private void UpdateText(int count)

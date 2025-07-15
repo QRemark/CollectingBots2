@@ -9,8 +9,8 @@ public class UnitSpawner : Spawner<Unit>
 
     private float _yOffset = 0f; 
     private Quaternion _defaultRotation = Quaternion.identity;
-    private Vector3 _defaultVelocity = Vector3.zero;
     private List<Unit> _units = new List<Unit>();
+    private Vector3 _defaultVelocity = Vector3.zero;
     private Vector3 _spawnPoint;
 
     public IEnumerable<Unit> Units => _units;

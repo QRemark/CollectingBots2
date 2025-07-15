@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Base : MonoBehaviour
@@ -19,7 +18,6 @@ public class Base : MonoBehaviour
     private Dictionary<Resource, Unit> _activeTasks;
     private List<Unit> _subscribedUnits;
     private List<Resource> _availableResources;
-    public ResourceCounter ResourceCounter => _resourceCounter;
 
     private void Awake()
     {
@@ -31,7 +29,6 @@ public class Base : MonoBehaviour
     private void Start()
     {
         _assigner.Init(_activeTasks);
-        SubscribeAllUnits();
         _resourceUI.Initialize(_resourceCounter);
         StartCoroutine(ScanRoutine());
     }
@@ -47,13 +44,13 @@ public class Base : MonoBehaviour
 
     private void PerformScanCycle()
     {
-        SubscribeAllUnits();
+        CheckUnits();
         RefreshAvailableResources();
 
         _assigner.AssignTasks(_unitSpawner.Units, _availableResources);
     }
 
-    private void SubscribeAllUnits()
+    private void CheckUnits()
     {
         foreach (Unit unit in _unitSpawner.Units)
         {
