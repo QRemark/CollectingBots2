@@ -8,6 +8,7 @@ public class ResourceSpawner : Spawner<Resource>
     [SerializeField] private float _spawnYOffcet = 20f;
 
     [SerializeField] private Transform _spawnCenter;
+    [SerializeField] private ResourceStorage _resourceStorage;
 
     private float _fullCircleRadians = Mathf.PI * 2f;
     private float _timer;
@@ -16,6 +17,12 @@ public class ResourceSpawner : Spawner<Resource>
     private void Update()
     {
         GenerateResourceOnInterval();
+    }
+
+    public override void ReturnToPool(Resource resource)
+    {
+        resource.OnCollected -= ReturnToPool; 
+        base.ReturnToPool(resource);          
     }
 
     private void GenerateResourceOnInterval()
@@ -37,6 +44,8 @@ public class ResourceSpawner : Spawner<Resource>
         if (resource != null)
         {
             resource.Activate(position);
+            resource.OnCollected += ReturnToPool;
+            _resourceStorage.RegisterResource(resource);
         }
     }
 

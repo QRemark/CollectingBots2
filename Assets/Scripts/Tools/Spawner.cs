@@ -27,7 +27,7 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
         return obj;
     }
 
-    public void ReturnToPool(T obj)
+    public virtual void ReturnToPool(T obj)
     {
         _pool.ReleaseObject(obj);
     }

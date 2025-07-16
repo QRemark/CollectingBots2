@@ -1,19 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
-    [SerializeField] private float _scanInterval = 5f;
+    [SerializeField] private ResourceScanScheduler _scanner;
 
     [SerializeField] private UnitSpawner _unitSpawner;
-    [SerializeField] private ResourceSpawner _resourceSpawner;
-
-    [SerializeField] private BaseResourceScanner _scanner;
     [SerializeField] private TaskAssigner _assigner;
 
     [SerializeField] private ResourceCounter _resourceCounter;
     [SerializeField] private BaseResourceUI _resourceUI;
+
+    [SerializeField] private ResourceStorage _resourceStorage;
 
     private Dictionary<Resource, Unit> _activeTasks;
     private List<Unit> _subscribedUnits;
@@ -28,26 +27,26 @@ public class Base : MonoBehaviour
 
     private void Start()
     {
-        _assigner.Init(_activeTasks);
+        _assigner.Init(_activeTasks, _resourceStorage);
         _resourceUI.Initialize(_resourceCounter);
-        StartCoroutine(ScanRoutine());
+        _scanner.ResourcesUpdated += OnResourcesUpdated;
     }
 
-    private IEnumerator ScanRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(_scanInterval);
-            PerformScanCycle();
-        }
-    }
-
-    private void PerformScanCycle()
+    private void OnResourcesUpdated(List<Resource> scannedResources)
     {
         CheckUnits();
-        RefreshAvailableResources();
+
+        _availableResources = new List<Resource>();
+        _availableResources = FilterAvailableResources(scannedResources);
 
         _assigner.AssignTasks(_unitSpawner.Units, _availableResources);
+    }
+
+    private List<Resource> FilterAvailableResources(List<Resource> scannedResources)
+    {
+        return scannedResources
+            .Where(resource => _resourceStorage.AvailableResources.Contains(resource))
+            .ToList();
     }
 
     private void CheckUnits()
@@ -62,11 +61,6 @@ public class Base : MonoBehaviour
         }
     }
 
-    private void RefreshAvailableResources()
-    {
-        _availableResources = _scanner.ScanAvailableResources(_activeTasks);
-    }
-
     private void OnUnitDelivered(Unit unit, Resource resource)
     {
         if (_activeTasks.ContainsKey(resource))
@@ -74,9 +68,19 @@ public class Base : MonoBehaviour
             _activeTasks.Remove(resource);
         }
 
+        _resourceStorage.UnregisterResource(resource);
         _resourceCounter.Increment();
 
-        resource.ResetState();
-        _resourceSpawner.ReturnToPool(resource);
+        resource.Collect();
+    }
+
+    private void OnDestroy()
+    {
+        _scanner.ResourcesUpdated -= OnResourcesUpdated;
+
+        foreach (Unit unit in _subscribedUnits)
+        {
+            unit.ResourceDelivered -= OnUnitDelivered;
+        }
     }
 }

@@ -12,17 +12,16 @@ public class Unit : MonoBehaviour
 
     private Vector3 _basePosition;
     private Resource _targetResource;
-    private bool _isBusy;
 
     public bool ReadyForNewTask { get; private set; }
-    public bool IsBusy => _isBusy;
+    public bool IsBusy { get; private set; }
 
     public event Action<Unit, Resource> ResourceDelivered;
 
     public void Initialize(Vector3 position)
     {
         _basePosition = position;
-        _isBusy = false;
+        IsBusy = false;
         ReadyForNewTask = true;
     }
 
@@ -34,7 +33,7 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isBusy == false)
+        if (IsBusy == false)
             return;
 
         if (_resourceHandler.IsTryPickup(_targetResource, _pickupRadius))
@@ -55,7 +54,7 @@ public class Unit : MonoBehaviour
             return false;
         }
 
-        if (_isBusy)
+        if (IsBusy)
         {
             return false;
         }
@@ -64,10 +63,9 @@ public class Unit : MonoBehaviour
         _mover.SetTarget(resource.transform.position);
         _resourceHandler.SetCarriedResource(null);
         _resourceHandler.ClearCarryState();
-        _isBusy = true;
-        ReadyForNewTask = false;
 
-        resource.MarkReserved();
+        IsBusy = true;
+        ReadyForNewTask = false;
 
         return true;
     }
@@ -80,7 +78,7 @@ public class Unit : MonoBehaviour
     public void BecomeIdle()
     {
         _targetResource = null;
-        _isBusy = false;
+        IsBusy = false;
         ReadyForNewTask = true;
         _mover.ClearTarget();
     }

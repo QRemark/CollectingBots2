@@ -5,10 +5,12 @@ using UnityEngine;
 public class TaskAssigner : MonoBehaviour
 {
     private Dictionary<Resource, Unit> _activeTasks;
+    private ResourceStorage _resourceStorage;
 
-    public void Init(Dictionary<Resource, Unit> activeTasks)
+    public void Init(Dictionary<Resource, Unit> activeTasks, ResourceStorage resourceStorage)
     {
         _activeTasks = activeTasks;
+        _resourceStorage = resourceStorage;
     }
 
     public void AssignTasks(IEnumerable<Unit> units, List<Resource> availableResources)
@@ -25,11 +27,11 @@ public class TaskAssigner : MonoBehaviour
     private void TryAssignTaskToUnit(Unit unit, List<Resource> availableResources)
     {
         Resource closest = availableResources
-            .Where(resourse => resourse != null && resourse.IsAvailable && _activeTasks.ContainsKey(resourse) == false)
+            .Where(resource => resource != null && _activeTasks.ContainsKey(resource) == false)
             .OrderBy(resource => Vector3.Distance(unit.transform.position, resource.transform.position))
             .FirstOrDefault();
 
-        if (closest == null) 
+        if (closest == null)
             return;
 
         bool accepted = unit.SetTarget(closest);
@@ -37,6 +39,7 @@ public class TaskAssigner : MonoBehaviour
         if (accepted)
         {
             _activeTasks[closest] = unit;
+            _resourceStorage.TryReserveResource(closest);
         }
     }
 }

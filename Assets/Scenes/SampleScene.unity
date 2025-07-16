@@ -5426,10 +5426,11 @@ GameObject:
   - component: {fileID: 1512214199}
   - component: {fileID: 1512214198}
   - component: {fileID: 1512214202}
-  - component: {fileID: 1512214204}
   - component: {fileID: 1512214203}
   - component: {fileID: 1512214205}
   - component: {fileID: 1512214206}
+  - component: {fileID: 1512214207}
+  - component: {fileID: 1512214208}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -5542,13 +5543,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5901a1b288e2a694a88a1294605db401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scanInterval: 5
+  _scanner: {fileID: 1512214207}
   _unitSpawner: {fileID: 1604258031}
-  _resourceSpawner: {fileID: 1738240517}
-  _scanner: {fileID: 1512214204}
   _assigner: {fileID: 1512214203}
   _resourceCounter: {fileID: 1512214206}
   _resourceUI: {fileID: 1148322577}
+  _resourceStorage: {fileID: 1738240519}
 --- !u!114 &1512214203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5561,20 +5561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5064230c93df5a1458176ac1c2f210d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1512214204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1512214196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639c6979ef9b3ff42a28957cb61dd9d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scanRadius: 110
-  _scanEffect: {fileID: 1512214205}
 --- !u!114 &1512214205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5600,6 +5586,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105e2266b1ef43440b8dbdb8bf047ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1512214207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512214196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe8ce687322acd244b11a1f338596029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scanInterval: 5
+--- !u!114 &1512214208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512214196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639c6979ef9b3ff42a28957cb61dd9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scanRadius: 110
+  _scanEffect: {fileID: 1512214205}
 --- !u!1 &1570121192
 GameObject:
   m_ObjectHideFlags: 0
@@ -6109,6 +6122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1738240518}
   - component: {fileID: 1738240517}
+  - component: {fileID: 1738240519}
   m_Layer: 0
   m_Name: ResourceSpawner
   m_TagString: Untagged
@@ -6136,6 +6150,7 @@ MonoBehaviour:
   _outerRadius: 100
   _spawnYOffcet: 20
   _spawnCenter: {fileID: 1738240518}
+  _resourceStorage: {fileID: 1738240519}
 --- !u!4 &1738240518
 Transform:
   m_ObjectHideFlags: 0
@@ -6151,14 +6166,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1738240519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738240516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7ebc5b79b914142bb409803f84196b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 705507995}
   - {fileID: 1682841788}
-  - {fileID: 1738240518}
   - {fileID: 1604258032}
+  - {fileID: 1738240518}
   - {fileID: 1512214201}
   - {fileID: 1570121195}
   - {fileID: 1642405687}
