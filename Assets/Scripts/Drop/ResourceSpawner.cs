@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ResourceSpawner : Spawner<Resource>
 {
+    private const float FullCircleRadians = Mathf.PI * 2f;
+
     [SerializeField] private float _spawnInterval = 1f;
     [SerializeField] private float _innerRadius = 20f;
     [SerializeField] private float _outerRadius = 100f;
@@ -10,7 +12,6 @@ public class ResourceSpawner : Spawner<Resource>
     [SerializeField] private Transform _spawnCenter;
     [SerializeField] private ResourceStorage _resourceStorage;
 
-    private float _fullCircleRadians = Mathf.PI * 2f;
     private float _timer;
     private Quaternion _defaultRotation = Quaternion.identity;
 
@@ -32,11 +33,11 @@ public class ResourceSpawner : Spawner<Resource>
         if (_timer >= _spawnInterval)
         {
             _timer = 0f;
-            CreateResource();
+            SpawnAndRegisterResource();
         }
     }
 
-    private void CreateResource()
+    private void SpawnAndRegisterResource()
     {
         Vector3 position = GetRandomPosition();
         Resource resource = SpawnObject(position, _defaultRotation);
@@ -51,7 +52,7 @@ public class ResourceSpawner : Spawner<Resource>
 
     private Vector3 GetRandomPosition()
     {
-        float angle = Random.Range(0f, _fullCircleRadians);
+        float angle = Random.Range(0f, FullCircleRadians);
         float radius = Mathf.Sqrt(Random.Range(_innerRadius * _innerRadius, _outerRadius * _outerRadius));
 
         float xOffcet = Mathf.Cos(angle) * radius;

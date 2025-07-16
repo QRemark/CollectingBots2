@@ -20,10 +20,10 @@ public class UnitSpawner : Spawner<Unit>
         _spawnPoint = transform.position;
 
         base.Start();
-        CreateInitialUnits();
+        InitializeUnits();
     }
 
-    private void CreateInitialUnits()
+    private void InitializeUnits()
     {
         for (int i = 0; i < _initialUnitCount; i++)
         {

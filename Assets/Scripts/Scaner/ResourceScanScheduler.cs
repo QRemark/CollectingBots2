@@ -11,10 +11,12 @@ public class ResourceScanScheduler : MonoBehaviour
     public event Action<List<Resource>> ResourcesUpdated;
 
     private ResourceDetector _detector;
+    private WaitForSeconds _waitDelay;
 
     private void Awake()
     {
         _detector = GetComponent<ResourceDetector>();
+        _waitDelay = new WaitForSeconds(_scanInterval);
     }
 
     private void Start()
@@ -26,7 +28,7 @@ public class ResourceScanScheduler : MonoBehaviour
     {
         while (enabled)
         {
-            yield return new WaitForSeconds(_scanInterval);
+            yield return _waitDelay;
             PerformScan();
         }
     }
